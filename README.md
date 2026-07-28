@@ -54,6 +54,7 @@ src
 - **POJO Models** with Jackson provide type-safe serialization/deserialization between Java objects and JSON payloads.
 - **DataFaker** generates dynamic, realistic test data instead of hardcoded values, reducing test data collisions and improving test reliability.
 - **Config Reader** centralizes environment configuration, keeping base URLs and settings out of the test code.
+- **Independent CRUD tests** isolate each operation for clearer failure diagnosis, while a dedicated **Smoke Test** validates the full booking lifecycle end-to-end in a single flow.
 
 ---
 
@@ -71,6 +72,34 @@ src
 - Invalid Booking ID returns **404**
 - Invalid Token returns **403**
 
+### Smoke Test
+- Full CRUD lifecycle in a single end-to-end flow (see [Smoke Test Flow](#smoke-test-flow) below)
+
+---
+
+## Smoke Test Flow
+
+```
+Get Authentication Token
+          │
+          ▼
+Create Booking
+          │
+          ▼
+Retrieve Booking
+          │
+          ▼
+Update Booking
+          │
+          ▼
+Delete Booking
+          │
+          ▼
+Verify Booking No Longer Exists
+```
+
+This end-to-end smoke test validates the complete booking lifecycle in a single flow, complementing the independent CRUD tests. Each run creates and cleans up its own data, so no shared state or leftover data affects subsequent test runs — no booking ID is stored globally.
+
 ---
 
 ## Features
@@ -81,6 +110,7 @@ src
 - POJO Models
 - Dynamic Test Data (DataFaker)
 - Reusable Base Test
+- End-to-End Smoke Test
 - Allure Reporting
 - GitHub Actions CI (runs on every push)
 - Request & Response Logging (on failure)
