@@ -41,9 +41,8 @@ public class BookingSmokeTest extends BaseTest {
 
         Assertions.assertNotNull(bookingId);
 
-        // 3. Booking'i getir
-        Booking bookingFromApi =
-                BookingClient.getBooking(bookingId);
+        // 3. Bookingi getir (retry ile - eventual consistency için)
+        Booking bookingFromApi = getBookingWithRetry(bookingId, 3, 500);
 
         Assertions.assertEquals(
                 booking.getFirstname(),
@@ -94,4 +93,32 @@ public class BookingSmokeTest extends BaseTest {
             // Expected behavior (404 Not Found)
         }
     }
+
+    /**
+     * Retrieves a booking with retry logic to handle eventual consistency
+     * on the demo API (booking may not be immediately queryable right after creation).
+     */
+    private Booking getBookingWithRetry(int bookingId, int maxAttempts, long delayMillis) {
+
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                return BookingClient.getBooking(bookingId);
+            } catch (AssertionError | Exception e) {
+                if (attempt == maxAttempts) {
+                    throw new RuntimeException(
+                            "Booking with ID " + bookingId + " could not be retrieved after " + maxAttempts + " attempts.",
+                            e
+                    );
+                }
+                try {
+                    Thread.sleep(delayMillis);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
+        throw new IllegalStateException("Unreachable code");
+    }
 }
+
