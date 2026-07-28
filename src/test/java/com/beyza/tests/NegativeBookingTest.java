@@ -6,6 +6,7 @@ import com.beyza.client.BookingClient;
 import com.beyza.models.Booking;
 import com.beyza.models.CreateBookingResponse;
 import io.restassured.internal.http.HttpResponseException;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,17 +18,19 @@ public class NegativeBookingTest extends BaseTest {
     void shouldReturn404ForInvalidBookingId() {
 
         try {
-            given()
+            Response response = given()
                     .when()
                     .get("/booking/999999999");
 
-            Assertions.fail("Expected a 404 but no exception was thrown");
+            // Exception fırlamadıysa (Linux/normal davranış), status code'u doğrudan kontrol et
+            Assertions.assertEquals(404, response.getStatusCode());
 
         } catch (Exception e) {
+            // Exception fırladıysa (Windows'taki özel davranış), içinden status code'u çıkar
             if (e instanceof HttpResponseException hre) {
                 Assertions.assertEquals(404, hre.getStatusCode());
             } else {
-                throw e;
+                throw new RuntimeException(e);
             }
         }
     }
@@ -44,20 +47,20 @@ public class NegativeBookingTest extends BaseTest {
         updatedBooking.setFirstname("Hacker");
 
         try {
-            given()
+            Response response = given()
                     .contentType("application/json")
                     .cookie("token", "invalidToken123")
                     .body(updatedBooking)
                     .when()
                     .put("/booking/" + createResponse.getBookingid());
 
-            Assertions.fail("Expected a 403 but no exception was thrown");
+            Assertions.assertEquals(403, response.getStatusCode());
 
         } catch (Exception e) {
             if (e instanceof HttpResponseException hre) {
                 Assertions.assertEquals(403, hre.getStatusCode());
             } else {
-                throw e;
+                throw new RuntimeException(e);
             }
         }
     }
