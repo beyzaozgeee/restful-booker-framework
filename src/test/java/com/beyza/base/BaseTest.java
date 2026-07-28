@@ -1,5 +1,6 @@
 package com.beyza.base;
 
+import com.beyza.config.ConfigReader;
 import io.restassured.RestAssured;
 import io.restassured.config.LogConfig;
 import io.restassured.filter.log.LogDetail;
@@ -9,7 +10,7 @@ public class BaseTest {
 
     @BeforeEach
     void setup() {
-        RestAssured.baseURI = "https://restful-booker.herokuapp.com";
+        RestAssured.baseURI = ConfigReader.get("base.url");
 
         RestAssured.config = RestAssured.config()
                 .logConfig(LogConfig.logConfig()
