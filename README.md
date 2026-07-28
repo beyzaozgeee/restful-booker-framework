@@ -4,6 +4,7 @@
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Maven](https://img.shields.io/badge/Maven-Build-blue)
 ![Allure](https://img.shields.io/badge/Report-Allure-red)
+![JUnit5](https://img.shields.io/badge/Tests-JUnit%205-25A162)
 
 A REST API Test Automation Framework built with **Java 21**, **JUnit 5**, **Rest Assured**, **Maven**, **Allure Report**, and **GitHub Actions**.
 
@@ -33,6 +34,7 @@ src
 │       └── com.beyza
 │           ├── builders
 │           ├── client
+│           ├── config
 │           └── models
 │
 └── test
@@ -51,6 +53,7 @@ src
 - **Client Layer** separates raw API calls from test logic, so tests stay focused on assertions rather than request/response handling.
 - **POJO Models** with Jackson provide type-safe serialization/deserialization between Java objects and JSON payloads.
 - **DataFaker** generates dynamic, realistic test data instead of hardcoded values, reducing test data collisions and improving test reliability.
+- **Config Reader** centralizes environment configuration, keeping base URLs and settings out of the test code.
 
 ---
 
@@ -72,13 +75,15 @@ src
 
 ## Features
 
+- Layered Architecture (Client / Model / Builder / Test separation)
 - Builder Pattern
 - Client Layer
 - POJO Models
 - Dynamic Test Data (DataFaker)
 - Reusable Base Test
 - Allure Reporting
-- GitHub Actions CI
+- GitHub Actions CI (runs on every push)
+- Request & Response Logging (on failure)
 
 ---
 
@@ -119,6 +124,12 @@ or
 allure generate target/allure-results --clean
 ```
 
+Or, using the Maven plugin directly (no separate Allure installation required):
+
+```bash
+mvn allure:serve
+```
+
 ---
 
 ## Continuous Integration
@@ -141,3 +152,4 @@ Junior QA Engineer
 
 - GitHub: [github.com/beyzaozgeee](https://github.com/beyzaozgeee)
 - LinkedIn: [linkedin.com/in/beyza-özge-abay](https://www.linkedin.com/in/beyza-%C3%B6zge-abay-8abb20397/)
+
