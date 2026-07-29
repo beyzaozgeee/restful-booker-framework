@@ -159,7 +159,9 @@ Or, using the Maven plugin directly (no separate Allure installation required):
 ```bash
 mvn allure:serve
 ```
+### Sample Report
 
+![Allure Report](images/allure-report.png)
 ---
 
 ## Continuous Integration
@@ -182,4 +184,3 @@ Junior QA Engineer
 
 - GitHub: [github.com/beyzaozgeee](https://github.com/beyzaozgeee)
 - LinkedIn: [linkedin.com/in/beyza-özge-abay](https://www.linkedin.com/in/beyza-%C3%B6zge-abay-8abb20397/)
-
